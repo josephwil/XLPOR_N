@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .top-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f4f4f4;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 120px;
+    }
+    
+    .header-logo {
+        width: 50px;
+        margin-right: 15px;
+    }
+    
+    #search-bar {
+        width: 50%;
+        padding: 10px 15px;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    
+    .results-section {
+        display: flex;
+        gap: 20px;
+        margin: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .box {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        background-color: white;
+    }
+    
+    #box1, #box3 {
+        width: 45%;
+        height: auto;
+    }
+    
+    #box2 {
+        flex: 1;
+    }
+    
+    </style>
+    
+</head>
+
+<body>
+    <!-- Top Section -->
+    <div class="top-section">
+        <a href="IMAGE/logo/logo_engine.png">
+            <img src="image.png" alt="Logo" class="header-logo">
+        </a>
+        <input type="text" id="search-bar" placeholder="Search..." onkeypress="handleKeyPress(event)">
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+        <!-- Box 1: Top Search Result -->
+        <a id="box1" class="box" href="#" target="_blank">
+            <div class="result">
+                <div class="logo-container">
+                    <img class="logo" src="" alt="Logo">
+                </div>
+                <div class="content">
+                    <h3 class="title"></h3>
+                    <div class="link"></div>
+                    <h4 class="capital-title"></h4>
+                    <p class="description"></p>
+                </div>
+            </div>
+        </a>
+
+        <!-- Box 3: Image of Top Result -->
+        <div id="box3" class="box"></div>
+
+        <!-- Box 2: Remaining Results -->
+        <div id="box2" class="box"></div>
+    </div>
+
+    <script>
+        const apiKey = 'AIzaSyAXsua7reJ1_4n9Qc4dRkFZ7WmFeCjFQpE'; // Replace with your API key
+const cx = 'd2891043673434992';      // Replace with your Custom Search Engine ID
+
+// Get the search query from the URL
+const urlParams = new URLSearchParams(window.location.search);
+const query = urlParams.get('q');
+
+if (query) {
+    document.getElementById('search-bar').value = query; // Populate the search bar
+    fetchResults(query);
+}
+
+function fetchResults(query) {
+    fetch(`https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            const results = data.items;
+
+            if (results && results.length > 0) {
+                // Box 1: First result
+                const firstResult = results[0];
+                const box1 = document.getElementById('box1');
+                box1.href = firstResult.link;
+                box1.querySelector('.logo').src = firstResult.pagemap?.cse_thumbnail?.[0]?.src || 'placeholder-logo.png';
+                box1.querySelector('.title').textContent = firstResult.title;
+                box1.querySelector('.link').textContent = firstResult.link;
+                box1.querySelector('.capital-title').textContent = firstResult.title.toUpperCase();
+                box1.querySelector('.description').textContent = firstResult.snippet;
+
+                // Box 3: Image from the first result
+                const box3 = document.getElementById('box3');
+                box3.innerHTML = `
+                    <img src="${firstResult.pagemap?.cse_image?.[0]?.src || 'placeholder-image.png'}" alt="Website Image">
+                `;
+
+                // Box 2: Remaining results
+                const restResults = results.slice(1);
+                const box2 = document.getElementById('box2');
+                box2.innerHTML = restResults.map(r => `
+                    <a class="result" href="${r.link}" target="_blank">
+                        <div class="logo-container">
+                            <img class="logo" src="${r.pagemap?.cse_thumbnail?.[0]?.src || 'placeholder-logo.png'}" alt="Logo">
+                        </div>
+                        <div class="content">
+                            <h3 class="title">${r.title}</h3>
+                            <div class="link">${r.link}</div>
+                            <h4 class="capital-title">${r.title.toUpperCase()}</h4>
+                            <p class="description">${r.snippet}</p>
+                        </div>
+                    </a>
+                `).join('');
+            }
+        })
+        .catch(error => console.error('Error fetching results:', error));
+}
+
+document.getElementById('search-bar').addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        const newQuery = document.getElementById('search-bar').value.trim();
+        if (newQuery) {
+            window.location.href = `results.html?q=${encodeURIComponent(newQuery)}`;
+        }
+    }
+});
+
+    </script>
+</body>
+</html>
