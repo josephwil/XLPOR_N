@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPLORN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* Set background color to white */
+            overflow: hidden;
+            background-size: cover;
+            margin: 0;
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-container {
+    position: relative;
+    width: auto;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+    perspective: 1000px;
+}
+
+.search-container:hover {
+    transform: scale(1.1); /* Scale the entire search-container */
+}
+
+.search-container::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(90deg, red, magenta, cyan, blue, magenta, red);
+    background-size: 400%;
+    filter: blur(4px);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.search-container:hover::before {
+    opacity: 1;
+    animation: move-glow 8s linear infinite;
+}
+
+.red-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    z-index: 1;
+    animation: moveDot 3s linear infinite;
+    transition: opacity 0.3s ease;
+}
+
+.search-container:hover .red-dot {
+    opacity: 0;
+}
+
+.search-input {
+    width: 300px;
+    height: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    background-color: #ffffff;
+    transition: box-shadow 0.3s ease, width 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Initial shadow effect */
+}
+
+/* Increase width and shadow intensity on hover */
+.search-container:hover .search-input {
+    width: 450px; /* Expand input width */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25); /* Larger shadow on hover */
+}
+
+
+        @keyframes move-glow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes moveDot {
+            0% { top: 0; left: 0; }
+            25% { top: 0; left: 100%; transform: translateX(-100%); }
+            50% { top: 100%; left: 100%; transform: translate(-100%, -100%); }
+            75% { top: 100%; left: 0; transform: translateY(-100%); }
+            100% { top: 0; left: 0; }
+        }
+        /* Card Wrapper for the Glow Effect */
+        /* Card Wrapper for the Glow Effect */
+.card-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth scaling effect */
+}
+
+/* Slight Increase in Size on Hover */
+.card-wrapper:hover {
+    transform: scale(1.05); /* Slightly increases card size */
+}
+
+/* Glow Effect on Hover for Wrapper */
+.card-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, red, magenta, cyan, blue, magenta, red);
+    background-size: 400%;
+    filter: blur(8px); /* Slightly larger blur to make the glow soft */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.card-wrapper:hover::before {
+    opacity: 1;
+    animation: move-glow 8s linear infinite;
+}
+
+/* Card itself */
+.card {
+    position: relative;
+    width: 100px;
+    height: 130px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(246, 240, 244, 0.954);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1; /* Ensures content is above the glow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Image inside the card */
+.card img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Note inside the card */
+.card .note {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.card:hover .note {
+    transform: translateY(0);
+}
+
+/* Gradient animation for the glow effect */
+@keyframes move-glow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+
+
+    </style>
+      <link rel="stylesheet" href="EFFECT/gear_icon/styles.css">
+
+
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="settings-icon" onclick="toggleSettingsMenu()">⚙️</div>
+    <div class="settings-menu" id="settingsMenu">
+      <button onclick="toggleDarkMode()">Dark Mode</button>
+      <button onclick="toggleBubbles()">Bubble Mode</button>
+      <button onclick="window.open('EFFECT/BUBLE_EFFECT/EDIT_PAGE/edit.html')">Edit Bubble Name/Link</button>
+    </div>
+
+    <div class="container"> 
+        <div class="logo">
+            <img src="IMAGE/logo/logo_engine1.png" onclick="redirectToPage()" width="50%">         
+        </div>  
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search..." onkeypress="handleKeyPress(event)">
+            <div class="red-dot"></div>
+        </div>
+        
+        <div class="card-container">
+            <div class="card-wrapper">
+                <div class="card">
+                    <a href="ADD_PROJECT/sitopedia/sitopedia.html">
+                        <img src="IMAGE/icon/SITOPEDIA/sitopedia_icon1.png" alt="Icon 1">
+                    </a>
+                    <div class="note">SITOPEDIA</div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <a href="ADD_PROJECT/drop/dropversion2.html">
+                        <img src="IMAGE/icon/DROP/drop_icon1.png" alt="Icon 2">
+                    </a>                
+                    <div class="note">SHARE FILE</div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card">
+                    <a href="link-to-page1.html">
+                        <img src="IMAGE/icon/AI/ai_icon1.png" alt="Icon 3">
+                    </a>               
+                    <div class="note">AI</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        const query = document.getElementById('search-bar').value.trim();
+        if (query) {
+            // Redirect to the result page with the search query as a URL parameter
+            window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+        }
+    }
+}
+
+    </script>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const particlesArray = [];
+        const gradientColors = [
+            {color: '#ff4f81', stop: 0},
+            {color: '#ff76ff', stop: 0.3},
+            {color: '#38a4ff', stop: 0.6},
+            {color: '#00fffb', stop: 0.9},
+        ];
+
+        const mouse = { x: null, y: null };
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 2;
+                this.speedX = (Math.random() - 0.5) * 5;
+                this.speedY = (Math.random() - 0.5) * 5;
+                this.color = getGradientColor();
+                this.alpha = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.95;
+                this.alpha -= 0.01;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function getGradientColor() {
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradientColors.forEach((stop) => {
+                gradient.addColorStop(stop.stop, stop.color);
+            });
+            return gradient;
+        }
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            for (let i = 0; i < 10; i++) {
+                particlesArray.push(new Particle(mouse.x, mouse.y));
+            }
+        });
+
+        function animate() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].size <= 0.1 || particlesArray[i].alpha <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="EFFECT/gear_icon/script.js"></script>
+</body>
+</html>
