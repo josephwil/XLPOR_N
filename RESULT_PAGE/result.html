@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Section -->
+    <div class="top-section">
+        <img src="image.png" alt="Logo" class="logo" onclick="redirectToPage()">
+        <form id="searchForm" class="search-form">
+            <input type="text" id="searchInput" placeholder="Search..." value="" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+        <!-- Box 1: Top Search Result -->
+        <a id="box1" class="box" href="#" target="_blank"></a>
+
+        <!-- Box 3: Image of Top Result -->
+        <div id="box3" class="box"></div>
+
+        <!-- Box 2: Remaining Results -->
+        <div id="box2" class="box"></div>
+    </div>
+
+    <script>
+        const apiKey = "AIzaSyAXsua7reJ1_4n9Qc4dRkFZ7WmFeCjFQpE"; // Replace with your Google API key
+        const cx = "d2891043673434992"; // Replace with your Custom Search Engine ID
+
+        function redirectToPage() {
+            window.location.href = "index.html"; // Replace with the desired URL
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            fetchResults(query);
+        });
+
+        function fetchResults(query) {
+            fetch(`https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.items;
+                    if (results && results.length > 0) {
+                        // Box 1: First result
+                        const firstResult = results[0];
+                        const box1 = document.getElementById('box1');
+                        box1.innerHTML = `
+                            <h2>${firstResult.title}</h2>
+                            <p>${firstResult.snippet}</p>
+                        `;
+                        box1.href = firstResult.link;
+
+                        // Box 3: Image from the first result (if available)
+                        const box3 = document.getElementById('box3');
+                        box3.innerHTML = `
+                            <img src="${firstResult.pagemap?.cse_image?.[0]?.src || ''}" alt="Website Image" style="width: 100%; height: 100%;">
+                        `;
+
+                        // Box 2: Remaining results
+                        const restResults = results.slice(1);
+                        const box2 = document.getElementById('box2');
+                        box2.innerHTML = restResults.map(r => `
+                            <div>
+                                <h3>${r.title}</h3>
+                                <a href="${r.link}" target="_blank">${r.link}</a>
+                            </div>
+                        `).join('');
+                    }
+                });
+        }
+
+        // Get query from URL and fetch results
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q');
+        if (query) {
+            document.getElementById('searchInput').value = query;
+            fetchResults(query);
+        }
+    </script>
+</body>
+</html>

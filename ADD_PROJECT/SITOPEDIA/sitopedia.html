@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        #section1 {
+            width: 20%;
+            padding: 10px;
+            border-right: 1px solid #000;
+        }
+        #section1 button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #000;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        #section2 {
+            width: 80%;
+            padding: 10px;
+        }
+        #section2 h2 {
+            text-align: center;
+        }
+        #itemsList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #itemsList li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #000;
+        }
+        #itemsList a {
+            text-decoration: none;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="section1">
+        <h2>Section 1</h2>
+        <button onmouseover="showItems(1)" onclick="fixItems(1)">LIST 1</button>
+        <button onmouseover="showItems(2)" onclick="fixItems(2)">LIST 2</button>
+        <button onmouseover="showItems(3)" onclick="fixItems(3)">LIST 3</button>
+        <button onmouseover="showItems(4)" onclick="fixItems(4)">LIST 4</button>
+        <button onmouseover="showItems(5)" onclick="fixItems(5)">LIST 5</button>
+        <button onmouseover="showItems(6)" onclick="fixItems(6)">LIST 6</button>
+    </div>
+    <div id="section2">
+        <h2>SECTION 2</h2>
+        <h3>Items of LISTS</h3>
+        <ul id="itemsList">
+            <!-- Items will be displayed here -->
+        </ul>
+    </div>
+    <script>
+        let fixedList = null;
+
+        function showItems(listNumber) {
+            if (fixedList === null) {
+                const itemsList = document.getElementById('itemsList');
+                itemsList.innerHTML = '';
+                for (let i = 1; i <= 7; i++) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `page${i}.html`; // Link to another page
+                    link.textContent = `Item ${i} of LIST ${listNumber}`;
+                    listItem.appendChild(link);
+                    itemsList.appendChild(listItem);
+                }
+            }
+        }
+
+        function fixItems(listNumber) {
+            fixedList = listNumber;
+            showItems(listNumber);
+        }
+
+        document.addEventListener('mousemove', function(event) {
+            const section1 = document.getElementById('section1');
+            const section2 = document.getElementById('section2');
+            if (!section1.contains(event.target) && !section2.contains(event.target)) {
+                fixedList = null;
+                document.getElementById('itemsList').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

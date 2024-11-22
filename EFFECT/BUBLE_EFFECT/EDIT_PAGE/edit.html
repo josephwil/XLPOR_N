@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Bubbles</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .edit-form input, .edit-form button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Edit Bubbles</h2>
+<form class="edit-form" onsubmit="saveBubbles(); return false;">
+  <div id="bubble-forms"></div>
+  <button type="button" onclick="addBubble()">Add Bubble</button>
+  <button type="submit">Save Changes</button>
+</form>
+
+<script>
+  let bubblesData = JSON.parse(localStorage.getItem('bubblesData')) || [
+    { name: "Google", link: "https://www.google.com" },
+    { name: "OpenAI", link: "https://www.openai.com" },
+    { name: "GitHub", link: "https://www.github.com" },
+    { name: "Twitter", link: "https://www.twitter.com" },
+    { name: "YouTube", link: "https://www.youtube.com" }
+  ];
+
+  function renderBubbles() {
+    const container = document.getElementById('bubble-forms');
+    container.innerHTML = '';
+    bubblesData.forEach((bubble, index) => {
+      container.innerHTML += `
+        <input type="text" maxlength="9" placeholder="Name" value="${bubble.name}" data-index="${index}" onchange="updateBubbleName(event)">
+        <input type="url" placeholder="Link" value="${bubble.link}" data-index="${index}" onchange="updateBubbleLink(event)">
+      `;
+    });
+  }
+
+  function updateBubbleName(event) {
+    const index = event.target.getAttribute('data-index');
+    bubblesData[index].name = event.target.value;
+  }
+
+  function updateBubbleLink(event) {
+    const index = event.target.getAttribute('data-index');
+    bubblesData[index].link = event.target.value;
+  }
+
+  function addBubble() {
+    if (bubblesData.length < 9) { // Limit to 9 bubbles
+      bubblesData.push({ name: "", link: "" });
+      renderBubbles();
+    } else {
+      alert("Maximum bubble limit reached.");
+    }
+  }
+
+  function saveBubbles() {
+    localStorage.setItem('bubblesData', JSON.stringify(bubblesData));
+    alert("Bubbles updated!");
+  }
+
+  renderBubbles();
+</script>
+
+</body>
+</html>

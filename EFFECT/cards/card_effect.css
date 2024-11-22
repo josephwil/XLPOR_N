@@ -1,0 +1,42 @@
+
+        .card {
+            display: inline-block;/* Adjust in single roww  */
+            margin-right: 10px; /* Space between cards */
+            vertical-align: top;
+            position: relative;
+            width: 100px; /* Adjust this value */
+            height: 130px; /* Adjust this value */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(90, 88, 88, 0.258);
+        }
+        .card-container {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            gap: 20px; 
+            margin: 20px; /* Adjust the margin as needed *//* Margin around the entire container */
+            padding-top: 20px; /* Adjust to move the row down */
+        }
+        .card img {
+            width: 90%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .note {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .card:hover .note {
+            transform: translateY(0);
+        }        

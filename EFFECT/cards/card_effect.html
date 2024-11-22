@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Card Hover Effect</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .card {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .note {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .card:hover .note {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <img src="path-to-your-image1.jpg" alt="Icon 1">
+            <div class="note">This is note 1</div>
+        </div>
+        <div class="card">
+            <img src="path-to-your-image2.jpg" alt="Icon 2">
+            <div class="note">This is note 2</div>
+        </div>
+        <div class="card">
+            <img src="path-to-your-image3.jpg" alt="Icon 3">
+            <div class="note">This is note 3</div>
+        </div>
+        <div class="card">
+            <img src="path-to-your-image4.jpg" alt="Icon 4">
+            <div class="note">This is note 4</div>
+        </div>
+    </div>
+</body>
+</html>

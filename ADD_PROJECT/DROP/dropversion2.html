@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to File Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .login-container, .file-upload-container {
+            display: none;
+            padding: 20px;
+            max-width: 400px;
+            margin: 100px auto;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .login-container.active, .file-upload-container.active {
+            display: block;
+        }
+        h2 {
+            text-align: center;
+        }
+        .login-container input[type="text"], .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .file-list .file-item {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .file-list .file-item button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #clear-all {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Page -->
+    <div class="login-container active" id="login-container">
+        <h2>Login</h2>
+        <input type="text" id="user-id" placeholder="User ID" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button id="login-button">Login</button>
+        <p id="error-message" style="color: red; display:none;">Invalid User ID or Password</p>
+    </div>
+
+    <!-- File Upload Page -->
+    <div class="file-upload-container" id="file-upload-container">
+        <h2>File Upload with Removal Options</h2>
+        <input type="file" id="file-input" multiple>
+        <div class="file-list" id="file-list"></div>
+        <button id="clear-all">Clear All Files</button>
+    </div>
+
+    <script>
+        const loginButton = document.getElementById('login-button');
+        const userIdInput = document.getElementById('user-id');
+        const passwordInput = document.getElementById('password');
+        const errorMessage = document.getElementById('error-message');
+        const loginContainer = document.getElementById('login-container');
+        const fileUploadContainer = document.getElementById('file-upload-container');
+        
+        // Hardcoded login credentials (can be replaced by actual authentication mechanism)
+        const correctUserId = "admin";
+        const correctPassword = "password123";
+
+        // Login functionality
+        loginButton.addEventListener('click', () => {
+            const userId = userIdInput.value;
+            const password = passwordInput.value;
+            
+            // Check login credentials
+            if (userId === correctUserId && password === correctPassword) {
+                // Hide login form and show file upload form
+                loginContainer.classList.remove('active');
+                fileUploadContainer.classList.add('active');
+            } else {
+                // Show error message
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // File Upload Logic
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const clearAllButton = document.getElementById('clear-all');
+        
+        // Handle file input change event
+        fileInput.addEventListener('change', () => {
+            const files = Array.from(fileInput.files);
+            files.forEach((file) => addFileToList(file));
+        });
+
+        // Add file to the list
+        function addFileToList(file) {
+            const fileItem = document.createElement('div');
+            fileItem.classList.add('file-item');
+            
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => {
+                fileItem.remove();
+            });
+
+            fileItem.appendChild(fileName);
+            fileItem.appendChild(removeButton);
+            fileList.appendChild(fileItem);
+        }
+
+        // Clear all files
+        clearAllButton.addEventListener('click', () => {
+            fileList.innerHTML = '';
+            fileInput.value = ''; // Reset file input
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+}
+
+.search-container {
+    margin: auto;
+    width: 50%;
+}
+
+.logo {
+    width: 100px;
+    cursor: pointer;
+}
+
+form {
+    margin-top: 20px;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 20px;
+}
